@@ -1,0 +1,80 @@
+#side_button1 {
+    background: #ffb347;   /* オレンジ系（サイド1用）*/
+    color: black;
+    border: round #ff9800;
+
+}
+#side_button2 {
+    background: #87ceeb;   /* 水色（サイド2用）*/
+    color: black;
+    border: round #0099cc;
+}
+#left_click {
+    background: #ff7675;   /* ピンク系（左クリック用）*/
+    color: white;
+    border: round #e17055;
+}
+#right_click {
+    background: #55efc4;   /* 緑系（右クリック用）*/
+    color: #222;
+    border: round #00b894;
+}
+#scroll_down {
+    background: #ffeaa7;   /* 黄色（スクロールダウン用）*/
+    color: #222;
+    border: round #fdcb6e;
+}
+#scroll_up {
+    background: #a29bfe;   /* 青紫（スクロールアップ用）*/
+    color: white;
+    border: round #6c5ce7;
+}
+
+/* 全体の中央寄せと横並び */
+MouseWidget {
+    align: center middle;
+    height: auto;
+    width: auto;
+    padding: 2 4;
+}
+
+/* 最上位のHorizontal（全体の横並び） */
+MouseWidget > .horizontal {
+    align: center middle;
+}
+
+/* 左右のサイドボタン（縦並び） */
+#side_button1, #side_button2 {
+    width: 7;
+    height: 3;
+    margin: 1 0;
+    border: round $accent;
+    background: $panel;
+    content-align: center middle;
+}
+
+/* 左クリック・右クリックボタン */
+#left_click, #right_click {
+    width: 11;
+    height: 4;
+    margin: 1 0;
+    border: round $primary;
+    background: $surface;
+    content-align: center middle;
+}
+
+/* スクロール系 */
+#scroll_up, #scroll_down {
+    width: 9;
+    height: 2;
+    margin: 1 0;
+    border: heavy $secondary;
+    background: $background;
+    content-align: center middle;
+    text-style: italic;
+}
+
+/* 各Vertical内の配置調整 */
+MouseWidget .vertical {
+    align: center middle;
+}
