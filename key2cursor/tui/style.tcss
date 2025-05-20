@@ -1,37 +1,68 @@
 Screen {
-    layout: grid;
+    layout: horizontal;
     grid-size: 2;
+    content-align: center middle;
 }
 
-/* マウス系 */
-/* 全体の中央寄せと横並び */
-MouseWidget {
-    align: center middle;
+/* --- 全体のスタイル --- */
+.bordered-list {
+    border: white round;
     height: auto;
-    width: auto;
-    padding: 5 10;
+    width: 30%;
+}
+.bordered-buttons {
+    border: white round;
+    height: auto;
+    width: 70%;
+    content-align: center middle;
 }
 
-/* 最上位のHorizontal（全体の横並び） */
-MouseWidget > .horizontal {
-    align: center middle;
+/* ---マウス系--- */
+/* 各ボタンのフレームごとの位置調整 */
+.side-buttons{
+    width:15%;
+}
+.main-mouse-frame{
+    width: 70%;
+    content-align: center middle;
+}
+.mouse-mode {
+    width: 15%;
 }
 
-/* 左右のサイドボタン（縦並び） */
+.main-mouse-buttons {
+    content-align: center middle;
+    layout: grid;
+    border: round $primary;
+    background: $surface;
+    width: 75;
+    grid-size: 3;
+}
+
 #side_button1, #side_button2 {
-    width: 1;
+    width: 90%;
     height: 8;
     border: round $accent;
     background: $panel;
-    margin: 1 0;
+}
+#side_button1 {
+    margin: 15 1 1 1;
 }
 
-/* 左クリック・右クリックボタン */
+#side_button2 {
+    margin: 1;
+}
+
 #left_click, #right_click {
     width: 10;
-    height: 15;
+    height: 20;
     border: round $primary;
     background: $surface;
+    content-align: center middle;
+}
+
+#left_click {
+    margin-left: 8;
 }
 
 /* スクロール系 */
@@ -41,7 +72,22 @@ MouseWidget > .horizontal {
     border: heavy $secondary;
     background: $background;
     content-align: center middle;
-    margin: 1 0;
+}
+
+#scroll_up {
+    margin: 5 1 1 4;
+}
+#scroll_down {
+    margin: 1 1 1 4;
+}
+
+#mouse_mode {
+    width: 90%;
+    height: 4;
+    border: heavy $secondary;
+    background: $background;
+    content-align: center middle;
+    margin: 40 1 1 1;
 }
 
 /* 各Vertical内の配置調整 */
@@ -49,11 +95,10 @@ MouseWidget .vertical {
     align: center middle;
 }
 
-/* LIST */
+/* ---LIST--- */
 ListView {
-    width: 30;
+    width: 100%;
     height: auto;
-    margin: 2 2;
 }
 
 Label {
