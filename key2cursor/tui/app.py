@@ -1,24 +1,48 @@
-from textual.app import App, ComposeResult
-from textual.widgets import Footer, Header
+from textual.app import App
+from textual.binding import Binding
+from textual.widgets import Footer, Header, Button, Label, ListItem, ListView
+from textual.containers import Horizontal, Vertical
 
 
-class StopwatchApp(App):
-    """A Textual app to manage stopwatches."""
+class AppTest(App):
+    TITLE = "Key2Cursor"
+    BINDINGS = [
+        Binding("q", "quit", "Quit the app"),
+        Binding("question_mark", "help", "Show help screen", key_display="?"),
+        Binding("delete", "delete", "Delete the thing"),
+        Binding("j", "down", "Scroll down", show=False),
+    ]
+    CSS_PATH = r"style.tcss"
 
-    BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
-
-    def compose(self) -> ComposeResult:
-        """Create child widgets for the app."""
+    def compose(self):
         yield Header()
         yield Footer()
-
-    def action_toggle_dark(self) -> None:
-        """An action to toggle dark mode."""
-        self.theme = (
-            "textual-dark" if self.theme == "textual-light" else "textual-light"
+        yield ListView(
+            ListItem(Label("Left Click")),
+            ListItem(Label("Right Click")),
+            ListItem(Label("Scroll Up")),
+            ListItem(Label("Scroll Down")),
+            ListItem(Label("Side Button 1")),
+            ListItem(Label("Side Button 2")),
+        )
+        yield Horizontal(
+            Vertical(
+                Button("Side1", id="side_button1"),
+                Button("Side2", id="side_button2"),
+            ),
+            Vertical(
+                Button("Left Click", id="left_click"),
+            ),
+            Vertical(
+                Button("Scroll Down", id="scroll_down"),
+                Button("Scroll Up", id="scroll_up"),
+            ),
+            Vertical(
+                Button("Right Click", id="right_click"),
+            )
         )
 
-
 if __name__ == "__main__":
-    app = StopwatchApp()
+    # Run command
+    app = AppTest()
     app.run()

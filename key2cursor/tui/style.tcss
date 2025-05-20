@@ -1,0 +1,61 @@
+Screen {
+    layout: grid;
+    grid-size: 2;
+}
+
+/* マウス系 */
+/* 全体の中央寄せと横並び */
+MouseWidget {
+    align: center middle;
+    height: auto;
+    width: auto;
+    padding: 5 10;
+}
+
+/* 最上位のHorizontal（全体の横並び） */
+MouseWidget > .horizontal {
+    align: center middle;
+}
+
+/* 左右のサイドボタン（縦並び） */
+#side_button1, #side_button2 {
+    width: 1;
+    height: 8;
+    border: round $accent;
+    background: $panel;
+    margin: 1 0;
+}
+
+/* 左クリック・右クリックボタン */
+#left_click, #right_click {
+    width: 10;
+    height: 15;
+    border: round $primary;
+    background: $surface;
+}
+
+/* スクロール系 */
+#scroll_up, #scroll_down {
+    width: 1;
+    height: 4;
+    border: heavy $secondary;
+    background: $background;
+    content-align: center middle;
+    margin: 1 0;
+}
+
+/* 各Vertical内の配置調整 */
+MouseWidget .vertical {
+    align: center middle;
+}
+
+/* LIST */
+ListView {
+    width: 30;
+    height: auto;
+    margin: 2 2;
+}
+
+Label {
+    padding: 1 2;
+}
