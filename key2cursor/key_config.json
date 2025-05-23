@@ -1,0 +1,18 @@
+{
+  "mouseMove": {
+    "mouseMode": "n",
+    "moveUp": "e",
+    "moveDown": "d",
+    "moveLeft": "s",
+    "moveRight": "f"
+  },
+  "clickEvents": {
+    "leftClick": "a",
+    "rightClick": "w",
+    "scrollUp": "t",
+    "scrollDown": "g"
+  },
+  "option": {
+    "cursorSpeed": 50
+  }
+}
