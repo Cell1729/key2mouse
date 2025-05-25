@@ -5,4 +5,5 @@ def main():
     controller.keyboard_observer()
 
 if __name__ == "__main__":
+    # python -m test.test
     main()
