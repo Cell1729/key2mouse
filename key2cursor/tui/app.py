@@ -4,12 +4,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static
 from textual.containers import Vertical, Container
-from input_overlay import InputOverlay
-
-# memo
-# ListViewで現在のキーボードを表示する
-# Buttonでマウスのボタンごとにキーバインドを表示する。
-# 具体的にはマウスボタンを押下、したときにキーバインドを入力する画面を作成し入力できるようにする。
+from .input_overlay import InputOverlay
 
 class TuiApp(App):
     TITLE = "Key2Cursor"
@@ -130,13 +125,14 @@ class TuiApp(App):
         if event.button.id == "ok_btn":
             pass
         elif event.button.id not in self.VALUE_KEY :
-            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id]))
+            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id))
         else:
             # カーソルやスクロールの速度を入力する画面を表示
             # 整数のみを受付
-            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], int_only=True))
+            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True))
 
 if __name__ == "__main__":
     # Run command
+    # python -m key2cursor.tui.app
     app = TuiApp()
     app.run()

@@ -4,6 +4,7 @@ from textual.widgets import Button, Input, Label, Static
 from textual.containers import Container
 from textual import events
 from textual.css.query import NoMatches
+from key2cursor.config_manager import ConfigManager
 
 
 class InputOverlay(Screen):
@@ -46,18 +47,19 @@ class InputOverlay(Screen):
         "enter" : "ok_btn",
     }
     BINDINGS = [("escape", "app.pop_screen", "キャンセル")]
-    def __init__(self, key_name: str, int_only: bool = False):
+    def __init__(self, key_name: str, key_id: str, int_only: bool = False):
         super().__init__()
         self.key_name = key_name
+        self.key_id = key_id
         self.int_only = int_only
+        self.json_config = ConfigManager()
 
     def compose(self) -> ComposeResult:
-        # Containerで装飾や中央寄せ、枠線も作れる
         with Container(classes="overlay-container"):
             with Container(id="overlay_box"):
                 yield Container(Label(f'Input key "{self.key_name}"', id="input_label"), classes="label-container")
                 yield Static("")
-                yield Static("整数のみ入力してください") if self.int_only else Static("")
+                yield Static("")
                 yield Container(Input(placeholder="input here", id="keyboard_input"), classes="input-container")
                 yield Static("")
                 yield Static("")
@@ -69,10 +71,12 @@ class InputOverlay(Screen):
         if self.int_only:
             if not value.isdigit():
                 # 数値以外は受け付けない
-                self.query_one("#input_label", Label).update("整数のみ入力してください")
+                self.query_one("#input_label", Label).update("Please enter integer numbers only")
                 return
             value = int(value)
-        # ここでvalueを使う
+            self.json_config.save_value(self.key_id, value)
+        else:
+            self.json_config.save_keybind(self.key_id, value)
         self.app.pop_screen()
 
     def on_key(self, event: events.Key) -> None:
