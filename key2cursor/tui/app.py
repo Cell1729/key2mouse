@@ -1,7 +1,9 @@
+from textual import events
+from textual.css.query import NoMatches
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static
-from textual.containers import Horizontal, Vertical, Container
+from textual.containers import Vertical, Container
 
 # memo
 # ListViewで現在のキーボードを表示する
@@ -16,6 +18,19 @@ class App(App):
         Binding("delete", "delete", "Delete the thing"),
         Binding("j", "down", "Scroll down", show=False),
     ]
+    NAME_MAP = {
+        "e": "up",
+        "d": "down",
+        "s": "left",
+        "f": "right",
+        "w": "left_click",
+        "r": "right_click",
+        "t": "scroll_up",
+        "g": "scroll_down",
+        "1": "cursor_speed",
+        "2": "scroll_speed",
+        "3": "mouse_mode",
+    }
     CSS_PATH = r"style.tcss"
 
     def compose(self) ->ComposeResult:
@@ -75,6 +90,18 @@ class App(App):
         self.keylist.border_title = "Key Bindings"
         self.options.border_title = "Options"
 
+    def on_key(self, event: events.Key) -> None:
+        def press(button_id: str) -> None:
+            """Press a button, should it exist."""
+            try:
+                self.query_one(f"#{button_id}", Button).press()
+            except NoMatches:
+                pass
+
+        key = event.key
+        button_id = self.NAME_MAP.get(key)
+        if button_id is not None:
+            press(self.NAME_MAP.get(key, key))
 
 if __name__ == "__main__":
     # Run command
