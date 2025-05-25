@@ -12,7 +12,8 @@
     "scrollUp": "t",
     "scrollDown": "g"
   },
-  "option": {
-    "cursorSpeed": 50
+  "options": {
+    "cursorSpeed": 50,
+    "scrollSpeed": 50
   }
 }
