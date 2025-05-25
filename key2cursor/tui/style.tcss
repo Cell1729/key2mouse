@@ -8,23 +8,33 @@ Screen {
 .bordered-list {
     border: white round;
     height: auto;
-    width: 30%;
+    width: 20%;
 }
 .bordered-buttons {
     border: white round;
     height: auto;
-    width: 70%;
-    content-align: center middle;
+    width: 60%;
+    align: center middle;
+    layout: grid;
+    grid-size: 3;
+    grid-rows: 0.5fr 2fr 0.5fr;
+    grid-columns: 1fr 3fr 1fr;
+}
+.option-frame {
+    border: white round;
+    width: 20%;
+    align: center middle;
 }
 
 /* ---マウス系--- */
 /* 各ボタンのフレームごとの位置調整 */
-.side-buttons{
-    width:15%;
-}
 .main-mouse-frame{
-    width: 70%;
-    content-align: center middle;
+    width: 100%;
+    height: 100%;
+    align: center middle;
+    layout: grid;
+    grid-size: 3 2;
+
 }
 .mouse-mode {
     width: 15%;
@@ -39,33 +49,22 @@ Screen {
     grid-size: 3;
 }
 
-#side_button1, #side_button2 {
-    width: 90%;
-    height: 8;
-    border: round $accent;
-    background: $panel;
-}
-#side_button1 {
-    margin: 15 1 1 1;
-}
-
-#side_button2 {
-    margin: 1;
-}
-
 #left_click, #right_click {
     width: 10;
-    height: 20;
+    height: 15;
     border: round $primary;
     background: $surface;
     content-align: center middle;
 }
-
-#left_click {
-    margin-left: 8;
+#left_click_container, #right_click_container {
+    row-span: 2;
+    align: center top;
 }
 
-/* スクロール系 */
+#scroll_up_wheel, #scroll_down_wheel {
+    align: center top;
+}
+
 #scroll_up, #scroll_down {
     width: 1;
     height: 4;
@@ -75,19 +74,45 @@ Screen {
 }
 
 #scroll_up {
-    margin: 5 1 1 4;
+    margin: 1;
 }
 #scroll_down {
-    margin: 1 1 1 4;
+    margin: 1;
+}
+#left, #up, #right, #down {
+    width: 10;
+    height: 5;
+    border: heavy $secondary;
+    background: $background;
+    content-align: center middle;
+}
+.cell-center {
+    align: center middle;
+    width: 100%;
+    height: 100%;
 }
 
+/* キーボード配置及び数値の設定 */
 #mouse_mode {
     width: 90%;
     height: 4;
     border: heavy $secondary;
-    background: $background;
+    background: $panel;
     content-align: center middle;
-    margin: 40 1 1 1;
+    margin: 1 1 1 1;
+}
+#cursor_speed {
+    margin: 1;
+}
+
+#scroll_speed {
+    margin: 1;
+}
+#cursor_speed, #scroll_speed {
+    width: 90%;
+    height: 4;
+    border: round $accent;
+    background: $panel;
 }
 
 /* 各Vertical内の配置調整 */
