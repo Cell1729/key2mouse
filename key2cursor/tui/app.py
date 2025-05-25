@@ -174,6 +174,7 @@ class TuiApp(App):
         # ListViewをリフレッシュ
         list_view.refresh()
         self.key_list.refresh()
+
 if __name__ == "__main__":
     # Run command
     # python -m key2cursor.tui.app

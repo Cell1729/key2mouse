@@ -8,5 +8,5 @@
 ## Command
 
 ```bash
-key2cursor
+key2mosue
 ```
