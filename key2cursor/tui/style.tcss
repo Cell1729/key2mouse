@@ -129,3 +129,11 @@ ListView {
 Label {
     padding: 1 2;
 }
+
+#overlay_box {
+    width: 60%;
+    height: 8;
+    border: solid green;
+    align: center middle;
+    background: $background 90%;
+}

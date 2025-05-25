@@ -4,19 +4,28 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static
 from textual.containers import Vertical, Container
+from input_overlay import InputOverlay
 
 # memo
 # ListViewで現在のキーボードを表示する
 # Buttonでマウスのボタンごとにキーバインドを表示する。
 # 具体的にはマウスボタンを押下、したときにキーバインドを入力する画面を作成し入力できるようにする。
 
-class App(App):
+class TuiApp(App):
     TITLE = "Key2Cursor"
     BINDINGS = [
         Binding("q", "quit", "Quit the app"),
-        Binding("question_mark", "help", "Show help screen", key_display="?"),
-        Binding("delete", "delete", "Delete the thing"),
-        Binding("j", "down", "Scroll down", show=False),
+        Binding("e", "up", "Move Up"),
+        Binding("d", "down", "Move Down"),
+        Binding("s", "left", "Move Left"),
+        Binding("f", "right", "Move Right"),
+        Binding("w", "left_click", "Left Click"),
+        Binding("r", "right_click", "Right Click"),
+        Binding("t", "scroll_up", "Scroll Up"),
+        Binding("g", "scroll_down", "Scroll Down"),
+        Binding("1", "cursor_speed", "Cursor Speed"),
+        Binding("2", "scroll_speed", "Scroll Speed"),
+        Binding("3", "mouse_mode", "Mouse Mode"),
     ]
     NAME_MAP = {
         "e": "up",
@@ -31,7 +40,8 @@ class App(App):
         "2": "scroll_speed",
         "3": "mouse_mode",
     }
-    CSS_PATH = r"style.tcss"
+    CSS_PATH = "style.tcss"
+    VALUE_KEY = ["cursor_speed", "scroll_speed"]
 
     def compose(self) ->ComposeResult:
         yield Header()
@@ -103,7 +113,11 @@ class App(App):
         if button_id is not None:
             press(self.NAME_MAP.get(key, key))
 
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id not in self.VALUE_KEY :
+            self.push_screen(InputOverlay())
+
 if __name__ == "__main__":
     # Run command
-    app = App()
+    app = TuiApp()
     app.run()
