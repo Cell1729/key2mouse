@@ -40,6 +40,19 @@ class TuiApp(App):
         "2": "scroll_speed",
         "3": "mouse_mode",
     }
+    BINDINGS_LIST = {
+        "up": "Move Up",
+        "down": "Move Down",
+        "left": "Move Left",
+        "right": "Move Right",
+        "left_click": "Left Click",
+        "right_click": "Right Click",
+        "scroll_up": "Scroll Up",
+        "scroll_down": "Scroll Down",
+        "cursor_speed": "Cursor Speed",
+        "scroll_speed": "Scroll Speed",
+        "mouse_mode": "Mouse Mode",
+    }
     CSS_PATH = "style.tcss"
     VALUE_KEY = ["cursor_speed", "scroll_speed"]
 
@@ -114,8 +127,14 @@ class TuiApp(App):
             press(self.NAME_MAP.get(key, key))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id not in self.VALUE_KEY :
-            self.push_screen(InputOverlay())
+        if event.button.id == "ok_btn":
+            pass
+        elif event.button.id not in self.VALUE_KEY :
+            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id]))
+        else:
+            # カーソルやスクロールの速度を入力する画面を表示
+            # 整数のみを受付
+            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], int_only=True))
 
 if __name__ == "__main__":
     # Run command

@@ -1,6 +1,6 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Button, Input, Label
+from textual.widgets import Button, Input, Label, Static
 from textual.containers import Container
 from textual import events
 from textual.css.query import NoMatches
@@ -8,29 +8,71 @@ from textual.css.query import NoMatches
 
 class InputOverlay(Screen):
     CSS = """
+    .overlay-container{
+        align: center middle;
+    }
     #overlay_box {
-        width: 100%;
-        height: 100%;
+        width: 50%;
+        height: 50%;
         border: solid green;
         align: center middle;
         background: $background 90%;
+        layout: grid;
+        grid-size: 3;
+    }
+    #input_label {
+        width: 100%;
+        height: auto;
+        align: left bottom;
+    }
+    #ok_btn {
+        border: solid $foreground;
+        width: 20%;
+        height: auto;
+        align: center middle;
+    }
+    .btn-container {
+        align: right top;
+    }
+    .label-container {
+        align: left bottom;
+    }
+    .input-container {
+        align: center middle;
+        column-span: 3;
     }
     """
-    NAME_MAP = {
+    OVERLAY_KEYMAP = {
         "enter" : "ok_btn",
     }
     BINDINGS = [("escape", "app.pop_screen", "キャンセル")]
+    def __init__(self, key_name: str, int_only: bool = False):
+        super().__init__()
+        self.key_name = key_name
+        self.int_only = int_only
 
     def compose(self) -> ComposeResult:
         # Containerで装飾や中央寄せ、枠線も作れる
-        with Container(id="overlay_box"):
-            yield Label("Input key", id="input_label")
-            yield Input(placeholder="ここに入力", id="commit_input")
-            yield Button("OK", id="ok_btn")
+        with Container(classes="overlay-container"):
+            with Container(id="overlay_box"):
+                yield Container(Label(f'Input key "{self.key_name}"', id="input_label"), classes="label-container")
+                yield Static("")
+                yield Static("整数のみ入力してください") if self.int_only else Static("")
+                yield Container(Input(placeholder="input here", id="keyboard_input"), classes="input-container")
+                yield Static("")
+                yield Static("")
+                yield Container(Button("OK", id="ok_btn"), classes="btn-container")
 
     def on_button_pressed(self, event):
-        # 入力結果の取得と画面を閉じる
-        value = self.query_one("#commit_input", Input).value
+        """ボタンが押下されたときの処理"""
+        value = self.query_one("#keyboard_input", Input).value
+        if self.int_only:
+            if not value.isdigit():
+                # 数値以外は受け付けない
+                self.query_one("#input_label", Label).update("整数のみ入力してください")
+                return
+            value = int(value)
+        # ここでvalueを使う
         self.app.pop_screen()
 
     def on_key(self, event: events.Key) -> None:
@@ -42,6 +84,6 @@ class InputOverlay(Screen):
                 pass
 
         key = event.key
-        button_id = self.NAME_MAP.get(key)
+        button_id = self.OVERLAY_KEYMAP.get(key)
         if button_id is not None:
-            press(self.NAME_MAP.get(key, key))
+            press(self.OVERLAY_KEYMAP.get(key, key))
