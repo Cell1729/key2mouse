@@ -5,6 +5,10 @@ from textual.binding import Binding
 from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static
 from textual.containers import Vertical, Container
 from .input_overlay import InputOverlay
+from key2cursor.lib.json_manager import load_json
+import os
+
+JSON_PATH = os.path.abspath(r'key2cursor/key_config.json')
 
 class TuiApp(App):
     TITLE = "Key2Cursor"
@@ -51,26 +55,33 @@ class TuiApp(App):
     CSS_PATH = "style.tcss"
     VALUE_KEY = ["cursor_speed", "scroll_speed"]
 
+    def __init__(self):
+        super().__init__()
+        self.key_list = None
+        self.options = None
+        self.json_data = load_json(JSON_PATH)
+
+
     def compose(self) ->ComposeResult:
         yield Header()
         yield Footer()
         # Key Bindings List
-        self.keylist =  Container(
+        self.key_list =  Container(
             ListView(
-                ListItem(Label("Move Up - <mouse mode + up>")),
-                ListItem(Label("Move Down - <mouse mode + down>")),
-                ListItem(Label("Move Left - <mouse mode + left>")),
-                ListItem(Label("Move Right - <mouse mode + right>")),
-                ListItem(Label("Left Click - <mouse mode + left>")),
-                ListItem(Label("Right Click - <mouse mode + right>")),
-                ListItem(Label("Scroll Up - <mouse mode + up>")),
-                ListItem(Label("Scroll Down - <mouse mode + down>")),
-                ListItem(Label("Cursor Speed - <50>")),
-                ListItem(Label("Scroll Speed - <50>")),
+                ListItem(Label(f'Move Up - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveUp"]}">')),
+                ListItem(Label(f'Move Down - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveDown"]}">')),
+                ListItem(Label(f'Move Left - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveLeft"]}">')),
+                ListItem(Label(f'Move Right - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveRight"]}">')),
+                ListItem(Label(f'Left Click - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["leftClick"]}">')),
+                ListItem(Label(f'Right Click - <{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["rightClick"]}">')),
+                ListItem(Label(f'Scroll Up - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollUp"]}">')),
+                ListItem(Label(f'Scroll Down - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollDown"]}">')),
+                ListItem(Label(f"Cursor Speed - <{self.json_data["options"]["cursorSpeed"]}>")),
+                ListItem(Label(f"Scroll Speed - <{self.json_data["options"]["scrollSpeed"]}>")),
             ),
             classes="bordered-list",
         )
-        yield self.keylist
+        yield self.key_list
         # Mouse buttons
         yield Container(
             Static(""),
@@ -105,7 +116,7 @@ class TuiApp(App):
         yield self.options
 
     def on_mount(self)->None:
-        self.keylist.border_title = "Key Bindings"
+        self.key_list.border_title = "Key Bindings"
         self.options.border_title = "Options"
 
     def on_key(self, event: events.Key) -> None:
@@ -123,14 +134,46 @@ class TuiApp(App):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "ok_btn":
-            pass
-        elif event.button.id not in self.VALUE_KEY :
-            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id))
+            # Reload the JSON data and update the key list
+            self.reload_json()
+        elif event.button.id not in self.VALUE_KEY:
+            # コールバックとしてreload_jsonを渡す
+            self.push_screen(
+                InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, callback=self.reload_json))
         else:
             # カーソルやスクロールの速度を入力する画面を表示
-            # 整数のみを受付
-            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True))
+            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True,
+                                          callback=self.reload_json))
 
+    def reload_json(self):
+        """Reload the JSON data and update the key list."""
+        self.json_data = load_json(JSON_PATH)
+        list_view = self.key_list.query_one(ListView)
+        list_view.clear()  # ListViewをクリア
+
+        # 各ListItemを1つずつ追加
+        list_view.append(ListItem(Label(
+            f'Move Up - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveUp"]}">')))
+        list_view.append(ListItem(Label(
+            f'Move Down - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveDown"]}">')))
+        list_view.append(ListItem(Label(
+            f'Move Left - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveLeft"]}">')))
+        list_view.append(ListItem(Label(
+            f'Move Right - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["mouseMove"]["moveRight"]}">')))
+        list_view.append(ListItem(Label(
+            f'Left Click - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["leftClick"]}">')))
+        list_view.append(ListItem(Label(
+            f'Right Click - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["rightClick"]}">')))
+        list_view.append(ListItem(Label(
+            f'Scroll Up - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollUp"]}">')))
+        list_view.append(ListItem(Label(
+            f'Scroll Down - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollDown"]}">')))
+        list_view.append(ListItem(Label(f"Cursor Speed - <{self.json_data['options']['cursorSpeed']}>")))
+        list_view.append(ListItem(Label(f"Scroll Speed - <{self.json_data['options']['scrollSpeed']}>")))
+
+        # ListViewをリフレッシュ
+        list_view.refresh()
+        self.key_list.refresh()
 if __name__ == "__main__":
     # Run command
     # python -m key2cursor.tui.app

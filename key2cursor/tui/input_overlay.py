@@ -47,12 +47,13 @@ class InputOverlay(Screen):
         "enter" : "ok_btn",
     }
     BINDINGS = [("escape", "app.pop_screen", "キャンセル")]
-    def __init__(self, key_name: str, key_id: str, int_only: bool = False):
+    def __init__(self, key_name: str, key_id: str, int_only: bool = False, callback=None):
         super().__init__()
         self.key_name = key_name
         self.key_id = key_id
         self.int_only = int_only
         self.json_config = ConfigManager()
+        self.callback = callback
 
     def compose(self) -> ComposeResult:
         with Container(classes="overlay-container"):
@@ -77,6 +78,9 @@ class InputOverlay(Screen):
             self.json_config.save_value(self.key_id, value)
         else:
             self.json_config.save_keybind(self.key_id, value)
+
+        if self.callback:
+            self.callback()
         self.app.pop_screen()
 
     def on_key(self, event: events.Key) -> None:
