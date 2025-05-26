@@ -37,37 +37,29 @@ class KeyboardMouseController:
         keyboard.wait()
 
     def on_up(self):
-        print("上に移動")
         now_cursor = pyautogui.position()
         pyautogui.moveTo(now_cursor.x, now_cursor.y - self.mouse_speed)
 
     def on_down(self):
-        print("下に移動")
         now_cursor = pyautogui.position()
         pyautogui.moveTo(now_cursor.x, now_cursor.y + self.mouse_speed)
 
     def on_left(self):
-        print("左に移動")
         now_cursor = pyautogui.position()
         pyautogui.moveTo(now_cursor.x - self.mouse_speed, now_cursor.y)
 
     def on_right(self):
-        print("右に移動")
         now_cursor = pyautogui.position()
         pyautogui.moveTo(now_cursor.x + self.mouse_speed, now_cursor.y)
 
     def left_click(self):
-        print("左クリック")
         pyautogui.click()
 
     def right_click(self):
-        print("右クリック")
         pyautogui.rightClick()
 
     def scroll_up(self):
-        print("スクロールアップ")
         pyautogui.scroll(self.scroll_speed)
 
     def scroll_down(self):
-        print("スクロールダウン")
         pyautogui.scroll(self.scroll_speed * -1)
