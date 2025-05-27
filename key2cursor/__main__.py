@@ -1,6 +1,7 @@
 from pystray import Icon, MenuItem, Menu
 from PIL import Image
 import threading
+from plyer import notification
 from key2cursor.tui.app import TuiApp
 from key2cursor.keyboard_mouse_controller import KeyboardMouseController
 
@@ -23,6 +24,12 @@ class MainApp:
     def start_controller(self):
         if not self.status:
             self.status = True
+            notification.notify(
+                title = "Key2Cursor",
+                message = "Running Key2Cursor Controller",
+                app_name = "Key2Cursor",
+                timeout = 5
+            )
             threading.Thread(target=self.keyboard_mouse_controller.keyboard_observer, daemon=True).start()
 
     def stop_controller(self):
