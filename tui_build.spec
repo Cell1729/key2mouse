@@ -1,5 +1,4 @@
 # -*- mode: python ; coding: utf-8 -*-
-
 add_datas = [
     ('key2cursor/*.json', 'key2cursor'),
     ('key2cursor/tui/*.tcss', 'key2cursor/tui'),
@@ -12,18 +11,15 @@ add_datas = [
 block_cipher = None
 
 a = Analysis(
-    ['key2cursor\\__main__.py'],
+    ['key2cursor\\tui_main.py'],
     pathex=[],
     binaries=[],
     datas=add_datas,
-    hiddenimports=['plyer.platforms.win.notification'],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
-    cipher=block_cipher,
     noarchive=False,
     optimize=0,
 )
@@ -36,14 +32,14 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='key2mouse_noconsole',
+    name='key2mouse_tui',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

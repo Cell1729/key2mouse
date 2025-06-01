@@ -2,7 +2,7 @@ from pystray import Icon, MenuItem, Menu
 from PIL import Image
 import threading
 from plyer import notification
-from key2cursor.tui.app import TuiApp
+import subprocess
 from key2cursor.keyboard_mouse_controller import KeyboardMouseController
 
 class MainApp:
@@ -25,10 +25,10 @@ class MainApp:
         if not self.status:
             self.status = True
             notification.notify(
-                title = "Key2Cursor",
-                message = "Running Key2Cursor Controller",
-                app_name = "Key2Cursor",
-                timeout = 5
+                title="Key2Cursor",
+                message="Running Key2Cursor Controller",
+                app_name="Key2Cursor",
+                timeout=5
             )
             threading.Thread(target=self.keyboard_mouse_controller.keyboard_observer, daemon=True).start()
 
@@ -37,13 +37,8 @@ class MainApp:
             self.status = False
 
     def open_tui(self):
-        # Controllerを停止
-        self.stop_controller()
-        # TUIを起動
-        app = TuiApp()
-        app.run()
-        # TUI終了後にControllerを再起動
-        self.start_controller()
+        # TUIを別プロセスで起動
+        subprocess.Popen(["key2mouse_tui.exe"], creationflags=subprocess.CREATE_NEW_CONSOLE)
 
     def stop_program(self, icon):
         self.stop_controller()
