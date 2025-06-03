@@ -32,7 +32,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='key2mouse_tui',
+    name='key2mouse',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
