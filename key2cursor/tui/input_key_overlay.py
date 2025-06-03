@@ -45,16 +45,21 @@ class InputKeyOverlay(Screen):
                 yield Container(Label(f'Input key "{self.key_name}".\nPress the key you want to set.\nescape : cancel', id="input_label"), classes="label-container")
 
     def on_key(self, event: events.Key) -> None:
-        event.prevent_default()
-        event.stop()
+        if event.key == "escape":
+            # escキーの場合は通常の処理を行う
+            self.app.pop_screen()
+        else:
+            # escキー以外のキーイベントを無効化
+            event.prevent_default()
+            event.stop()
 
-        # 押下されたキーをJSONに保存
-        pressed_key = event.key
-        self.json_config.save_keybind(self.key_id, pressed_key)
+            # 押下されたキーをJSONに保存
+            pressed_key = event.key
+            self.json_config.save_keybind(self.key_id, pressed_key)
 
-        # コールバックがあれば実行
-        if self.callback:
-            self.callback()
+            # コールバックがあれば実行
+            if self.callback:
+                self.callback()
 
-        # オーバーレイを閉じる
-        self.app.pop_screen()
+            # オーバーレイを閉じる
+            self.app.pop_screen()
