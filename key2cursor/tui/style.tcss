@@ -137,3 +137,8 @@ Label {
     align: center middle;
     background: $background 90%;
 }
+
+.value-item {
+    layout: grid;
+    grid-size: 2;
+}

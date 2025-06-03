@@ -38,7 +38,7 @@ class MainApp:
 
     def open_tui(self):
         # TUIを別プロセスで起動
-        subprocess.Popen(["key2mouse_tui.exe"], creationflags=subprocess.CREATE_NEW_CONSOLE)
+        subprocess.Popen(["key2mouse.exe"], creationflags=subprocess.CREATE_NEW_CONSOLE)
 
     def stop_program(self, icon):
         self.stop_controller()

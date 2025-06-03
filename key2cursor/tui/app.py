@@ -2,9 +2,10 @@ from textual import events
 from textual.css.query import NoMatches
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static
+from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static, Digits
 from textual.containers import Vertical, Container
-from .input_overlay import InputOverlay
+from .input_value_overlay import InputValueOverlay
+from .input_key_overlay import InputKeyOverlay
 from key2cursor.lib.json_manager import load_json
 import os
 
@@ -76,8 +77,14 @@ class TuiApp(App):
                 ListItem(Label(f'Right Click - <{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["rightClick"]}">')),
                 ListItem(Label(f'Scroll Up - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollUp"]}">')),
                 ListItem(Label(f'Scroll Down - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollDown"]}">')),
-                ListItem(Label(f"Cursor Speed - <{self.json_data["options"]["cursorSpeed"]}>")),
-                ListItem(Label(f"Scroll Speed - <{self.json_data["options"]["scrollSpeed"]}>")),
+                ListItem(Label(f"Cursor Speed - "),
+                         Digits(f"{self.json_data["options"]["cursorSpeed"]}"),
+                         classes="value-item"
+                         ),
+                ListItem(Label(f"Scroll Speed - "),
+                         Digits(f"{self.json_data["options"]["scrollSpeed"]}"),
+                         classes="value-item"
+                         ),
             ),
             classes="bordered-list",
         )
@@ -139,10 +146,10 @@ class TuiApp(App):
         elif event.button.id not in self.VALUE_KEY:
             # コールバックとしてreload_jsonを渡す
             self.push_screen(
-                InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, callback=self.reload_json))
+                InputKeyOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, callback=self.reload_json))
         else:
             # カーソルやスクロールの速度を入力する画面を表示
-            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True,
+            self.push_screen(InputValueOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True,
                                           callback=self.reload_json))
 
     def reload_json(self):
@@ -164,12 +171,16 @@ class TuiApp(App):
             f'Left Click - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["leftClick"]}">')))
         list_view.append(ListItem(Label(
             f'Right Click - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["rightClick"]}">')))
-        list_view.append(ListItem(Label(
-            f'Scroll Up - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollUp"]}">')))
-        list_view.append(ListItem(Label(
-            f'Scroll Down - <"{self.json_data["mouseMove"]["mouseMode"]}" + "{self.json_data["clickEvents"]["scrollDown"]}">')))
-        list_view.append(ListItem(Label(f"Cursor Speed - <{self.json_data['options']['cursorSpeed']}>")))
-        list_view.append(ListItem(Label(f"Scroll Speed - <{self.json_data['options']['scrollSpeed']}>")))
+        list_view.append(ListItem(
+            Label("Cursor Speed - "),
+            Digits(f"{self.json_data['options']['cursorSpeed']}"),
+            classes="value-item"
+        ))
+        list_view.append(ListItem(
+            Label("Scroll Speed - "),
+            Digits(f"{self.json_data['options']['scrollSpeed']}"),
+            classes="value-item"
+        ))
 
         # ListViewをリフレッシュ
         list_view.refresh()
