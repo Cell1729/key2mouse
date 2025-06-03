@@ -4,7 +4,8 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.widgets import Footer, Header, Button, Label, ListItem, ListView, Static
 from textual.containers import Vertical, Container
-from .input_overlay import InputOverlay
+from .input_value_overlay import InputValueOverlay
+from .input_key_overlay import InputKeyOverlay
 from key2cursor.lib.json_manager import load_json
 import os
 
@@ -139,10 +140,10 @@ class TuiApp(App):
         elif event.button.id not in self.VALUE_KEY:
             # コールバックとしてreload_jsonを渡す
             self.push_screen(
-                InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, callback=self.reload_json))
+                InputKeyOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, callback=self.reload_json))
         else:
             # カーソルやスクロールの速度を入力する画面を表示
-            self.push_screen(InputOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True,
+            self.push_screen(InputValueOverlay(self.BINDINGS_LIST[event.button.id], key_id=event.button.id, int_only=True,
                                           callback=self.reload_json))
 
     def reload_json(self):

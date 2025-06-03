@@ -7,7 +7,7 @@ from textual.css.query import NoMatches
 from key2cursor.config_manager import ConfigManager
 
 
-class InputOverlay(Screen):
+class InputValueOverlay(Screen):
     CSS = """
     .overlay-container{
         align: center middle;
@@ -47,7 +47,7 @@ class InputOverlay(Screen):
         "enter" : "ok_btn",
     }
     BINDINGS = [("escape", "app.pop_screen", "キャンセル")]
-    def __init__(self, key_name: str, key_id: str, int_only: bool = False, callback=None):
+    def __init__(self, key_name: str, key_id: str, int_only: bool = True, callback=None):
         super().__init__()
         self.key_name = key_name
         self.key_id = key_id
