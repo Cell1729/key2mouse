@@ -15,7 +15,7 @@
 
 ### Stable Release
 
-- [Release](https://github.com/Cell1729/key2mouse/releases/tag/Stable)
+- [Release](https://github.com/Cell1729/key2mouse/releases)
 
 ## Usage
 
@@ -29,5 +29,23 @@
 
 ![TuiSampleImage](docs/image/tuiSample.gif)
 
-> 現在No consoleで起動するとTUIが表示されません。
-> そのためTUIを使う場合は`key2mouse`を起動してからTUIを表示してください。
+## Key Bindings (Default)
+
+`n`は`Mouse Mode`を表します。
+
+| Key   | Action            |
+|-------|-------------------|
+| `n+e` | Move cursor up    |
+| `n+d` | Move cursor down  |
+| `n+s` | Move cursor left  |
+| `n+f` | Move cursor right |
+| `n+t` | Scroll up         |
+| `n+g` | Scroll down       |
+| `n+a` | Left click        |
+| `n+w` | Right click       |
+
+## RECOMMENDED SETTINGS
+
+- 環境変数に`Key2mouse.exe`を追加
+- `key2mouse_noconsole.exe`を起動時に実行するように設定
+
